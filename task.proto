@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message Task {
+  int32 id = 1;
+  float wcet = 2;
+  repeated int32 dependencies = 3;
+}
+
+message TaskGraph {
+  repeated Task tasks = 1;
+}
