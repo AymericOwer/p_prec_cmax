@@ -144,28 +144,38 @@ def main():
     parser.add_argument('-n', type=int, default=10, help='Nombre de tâches')
     parser.add_argument('-p', type=float, default=0.35, help="Probabilité de dépendance entre tâches")
     parser.add_argument('-m', type=int, default=4, help="Nombre de machines")
+    parser.add_argument('-o', type=str, default='resultats.txt', help="Nom du fichier de sortie")
     args = parser.parse_args()
 
     N = args.n
     P = args.p
     NB_MACHINES = args.m
+    OUTPUT_FILE = args.o
 
-    # Génère les tâches et leurs précédences
     tasks, precedences = generate_tasks_and_precedences(N, P)
-
-    # Exécute l'ordonnancement avec HEFT
     schedule, cmax, start_times, end_times = heft_scheduler(tasks, precedences, NB_MACHINES)
 
     # Affiche le planning final
-    for m in schedule:
-        print(f"Machine {m}:")
-        for t, s, e in schedule[m]:
-            print(f"  Task {t}: {s} -> {e}")
-    print("Cmax =", cmax)
+    # for m in schedule:
+    #     print(f"Machine {m}:")
+    #     for t, s, e in schedule[m]:
+    #         print(f"  Task {t}: {s} -> {e}")
+    # print("Cmax =", cmax)
 
     plot_dag(precedences, start_times, end_times)
+
+    # Écriture des résultats dans un fichier
+    with open(OUTPUT_FILE, 'w') as f:
+        f.write(f"{N}, {P}, {NB_MACHINES}, {cmax}\n")
+
+    # Affiche les résultats à l'écran
+    # print(f"Nombre de tâches (n): {N}")
+    # print(f"Probabilité de dépendance (p): {P}")
+    # print(f"Nombre de machines (m): {NB_MACHINES}")
+    # print(f"Cmax: {cmax}")
+    print(N,P,NB_MACHINES,cmax)
 
 if __name__ == "__main__":
     main()
 
-#  python3 ErdosRenyi.py -n 10 -p 0.35 -m 4
+# python3 ErdosRenyi.py -n 10 -p 0.35 -m 4 -o resultats.txt
