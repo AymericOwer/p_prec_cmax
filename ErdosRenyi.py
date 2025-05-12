@@ -34,7 +34,6 @@ def generate_tasks_and_precedences(n, p):
     return tasks, precedences
 
 
-
 # Reconstruit les successeurs à partir des précédences (utile pour les calculs de rang)
 def build_successors(precedences):
     successors = {}
