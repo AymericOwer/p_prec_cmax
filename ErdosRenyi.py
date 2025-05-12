@@ -162,18 +162,18 @@ def main():
     #         print(f"  Task {t}: {s} -> {e}")
     # print("Cmax =", cmax)
 
-    plot_dag(precedences, start_times, end_times)
+    # plot_dag(precedences, start_times, end_times)
 
     # Écriture des résultats dans un fichier
     with open(OUTPUT_FILE, 'w') as f:
-        f.write(f"{N}, {P}, {NB_MACHINES}, {cmax}\n")
+        f.write(f"0, {N}, {P}, {NB_MACHINES}, {cmax}\n")
 
     # Affiche les résultats à l'écran
     # print(f"Nombre de tâches (n): {N}")
     # print(f"Probabilité de dépendance (p): {P}")
     # print(f"Nombre de machines (m): {NB_MACHINES}")
     # print(f"Cmax: {cmax}")
-    print(N,P,NB_MACHINES,cmax)
+    print(0, N,P,NB_MACHINES,cmax)
 
 if __name__ == "__main__":
     main()

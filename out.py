@@ -19,7 +19,7 @@ def run_erdos_renyi_script(n, p, m, output_file):
 def generate_results():
     results = []
     n_values = list(range(1,101, 5))  # Exemple de tailles de tâches
-    p_values = np.arange(0.1, 0.55, 0.02)   # Probabilités de dépendance
+    p_values = [0.25, 0.5, 0.75]   # Probabilités de dépendance
     m_values = [4]  # Nombre de machines
     for n in n_values:
         for p in p_values:
@@ -37,10 +37,10 @@ def generate_results():
 # Générer un graphe à partir des résultats CSV
 def plot_results(results):
     # Extraire les données pour les axes du graphe
-    n_values = [int(row[0]) for row in results]
-    p_values = [float(row[1]) for row in results]
-    m_values = [int(row[2]) for row in results]
-    cmax_values = [int(row[3]) for row in results]
+    n_values = [int(row[1]) for row in results]
+    p_values = [float(row[2]) for row in results]
+    m_values = [int(row[3]) for row in results]
+    cmax_values = [int(row[4]) for row in results]
 
     # Exemple de graphique: Cmax en fonction de n
     plt.figure(figsize=(10, 6))
@@ -63,3 +63,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# faire la moyenne sur une dixaine d'instance plutot
+# p = 0.15 n= 100 300instances
+# comparer plusieurs heuristique
+
