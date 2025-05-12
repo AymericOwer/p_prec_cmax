@@ -1,10 +1,10 @@
 import subprocess
 import csv
 
-n_values = list(range(1, 151, 5))  # Exemple de tailles de tâches
-p_values = [0.65]   # Probabilités de dépendance
-m_values = [4]     # Nombre de machines
-INSTANCE = list(range(21))
+n_values = list(range(1, 201, 5))  # Exemple de tailles de tâches
+p_values = [0.25]   # Probabilités de dépendance
+m_values = [3]     # Nombre de machines
+INSTANCE = list(range(51))
 
 def run_erdos_renyi_script(n, p, m, output_file):
     command = [
