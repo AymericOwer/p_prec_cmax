@@ -21,22 +21,18 @@ def generate_gnp_dag(n, p):
 def generate_tasks_and_precedences(n, p):
     matrix = generate_gnp_dag(n, p)
 
-    successors = {i: [] for i in range(n)}
+    # Construction directe des dépendances (prédécesseurs)
+    precedences = {i: [] for i in range(n)}
     for i in range(n):
         for j in range(n):
             if matrix[i][j] == 1:
-                successors[i].append(j)
-
-    # Inverser les relations pour obtenir les dépendances (prédécesseurs)
-    precedences = {i: [] for i in range(n)}
-    for parent, children in successors.items():
-        for child in children:
-            precedences[child].append(parent)
+                precedences[j].append(i)
 
     # Génère un WCET (Worst Case Execution Time) aléatoire pour chaque tâche entre 1 et 10
     tasks = {i: random.randint(1, 10) for i in range(n)}
 
     return tasks, precedences
+
 
 
 # Reconstruit les successeurs à partir des précédences (utile pour les calculs de rang)
