@@ -2,6 +2,8 @@ import random
 import matplotlib.pyplot as plt
 import networkx as nx
 from matplotlib.patches import FancyArrowPatch
+import argparse
+
 
 # Génère un graphe orienté acyclique (DAG) aléatoire avec n sommets et une probabilité p
 def generate_gnp_dag(n, p):
@@ -106,12 +108,47 @@ def heft_scheduler(tasks, precedences, nb_machines):
     cmax = max(end_times.values())
     return schedule, cmax, start_times, end_times
 
+def plot_dag(precedences, start_times, end_times):
+    G = nx.DiGraph()
 
-# Point d'entrée principal
-if __name__ == "__main__":
-    N = 10               # Nombre de tâches
-    P = 0.35             # Probabilité d'existence d'une dépendance entre deux tâches
-    NB_MACHINES = 4      # Nombre de machines disponibles
+    # Ajouter les nœuds avec labels enrichis
+    for task in precedences:
+        start = int(start_times.get(task, 0))
+        end = int(end_times.get(task, 0))
+        G.add_node(task, label=f"T{task}\n{start}/{end}")
+
+    # Ajouter les arcs avec durées
+    for task, deps in precedences.items():
+        for dep in deps:
+            G.add_edge(dep, task)
+
+    pos = nx.spring_layout(G, seed=42)
+
+    # Dessiner le graphe avec les labels
+    node_labels = nx.get_node_attributes(G, 'label')
+    edge_labels = nx.get_edge_attributes(G, 'label')
+
+    plt.figure(figsize=(10, 8))
+    nx.draw(G, pos, with_labels=False, node_color='skyblue', node_size=1000, arrows=True)
+    nx.draw_networkx_labels(G, pos, labels=node_labels, font_size=11)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='red', font_size=9)
+
+    plt.title("Graphe des dépendances")
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Ordonnancement avec HEFT")
+    parser.add_argument('-n', type=int, default=10, help='Nombre de tâches')
+    parser.add_argument('-p', type=float, default=0.35, help="Probabilité de dépendance entre tâches")
+    parser.add_argument('-m', type=int, default=4, help="Nombre de machines")
+    args = parser.parse_args()
+
+    N = args.n
+    P = args.p
+    NB_MACHINES = args.m
 
     # Génère les tâches et leurs précédences
     tasks, precedences = generate_tasks_and_precedences(N, P)
@@ -124,4 +161,11 @@ if __name__ == "__main__":
         print(f"Machine {m}:")
         for t, s, e in schedule[m]:
             print(f"  Task {t}: {s} -> {e}")
-    print("Cmax =", cmax)  # Affiche le makespan final
+    print("Cmax =", cmax)
+
+    plot_dag(precedences, start_times, end_times)
+
+if __name__ == "__main__":
+    main()
+
+#  python3 ErdosRenyi.py -n 10 -p 0.35 -m 4
